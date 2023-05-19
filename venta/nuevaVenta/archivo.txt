@@ -1,0 +1,147 @@
+<?php
+include("php/addLista.php");
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estilos.css">
+    <title>Punto de Venta</title>
+</head>
+<body>
+    <header>
+        <div class="Top-Bar">
+            <div class="Drop-Bar">------------</div>
+            <div class="Tienda">
+                <h1 class="NombreTienda">San Juan Pablo II</h1>
+            </div>
+            <div class="Fecha">
+                <h1 class="FechaTienda">Abril 13, 2023</h1>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="Punto-Venta">
+            <div class="Buscador">
+                <form action="" class="Search_Bar">
+                    <input type="Search" name="Add">
+                    <button class="Search_btn" type="Submit">Añadir</button>
+                </form>
+            </div>
+
+            <div class="ListaProductos">
+                <form action="" method="POST">
+                    <table class="TablaVenta">
+                        <tr>
+                            <th>Cantidad</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Costo</th>
+                            <th>Inventario</th>
+                        </tr>
+                        <tr class="ListaVenta">
+                            <?php 
+                                require("php/conexion.php");
+                                $consulta = mysqli_query($conexion, "SELECT * FROM tventa WHERE tventa.THistorialVentas_id = 0");
+                                // $resu = $consulta -> fetch_assoc();
+                                // $idProd = $resu['TProductos_id'];
+                                if (mysqli_num_rows($consulta) > 0) {
+                                    $registro = mysqli_query($conexion, "SELECT tventa.THistorialVentas_id,tproductos.nombre_Articulo, tproductos.precio, tproductos.TProductos_id, tventa.TProductos_id, tventa.cantidad
+                                    FROM tproductos INNER JOIN tventa WHERE tventa.TProductos_id = tproductos.TProductos_id AND tventa.THistorialVentas_id = 0");
+                                    while ($fila = $registro -> fetch_assoc()) { ?>
+                                        <td class="CantidadD"><input type="number" name="Cantidad" value="1" class="Cantidad"></td>
+                                        <td class="Nombre"><?php echo $fila['nombre_Articulo']?></td>
+                                        <td class="Precio"><?php echo $fila['precio']?></td>
+                                        <td class="TotalProducto">$15</td>
+                                        <td>10</td>
+                                        <td class="EliminarProducto">Eliminar</td>
+                                    <?php   }
+                                }
+                            ?>
+                            
+                        </tr>
+                    </table>
+                </form>
+             
+            </div>
+        </div>
+        <div class="Productos">
+            <div class="Categorias">
+                <div class="CardCategoria">
+                    <h1>Panaderia</h1>
+                </div>
+                <div class="CardCategoria">
+                    
+                </div>
+                <div class="CardCategoria">
+                    
+                </div>
+            </div>
+            <div class="Buscador">
+                <form action="" class="Search_Bar">
+                    <input type="Search" name="Add">
+                    <button class="Search_btn" type="Submit">Buscar</button>
+                </form>
+            </div>
+            <div class="container_cards">
+                <div class="Cards_Row">
+                    <?php 
+                        require("php/conexion.php");
+                        $consulta = mysqli_query($conexion, "SELECT tproductos.TProductos_id, nombre_Articulo, precio, granel, modelo, Imagen, tinventario.stock
+                        FROM tproductos inner join tinventario where tproductos.TProductos_id = tinventario.TProductos_id;");
+                        if (mysqli_num_rows($consulta) > 0) { 
+                            while ($fila = $consulta -> fetch_assoc()) { ?> 
+                                <div class="Card_Producto">
+                                    <form action="#" method="POST">
+                                        <button type="submit" class="btn_add" name="add_PLista">
+                                        <img src="img/prod/<?php echo $fila['Imagen'] ?>" alt="" srcset="">
+                                        <div class="detalles_card">
+                                            <h2 class="nombre_producto"><?php echo $fila['nombre_Articulo'] ?></h2>
+                                            <p class="modelo_producto">50g</p>
+                                            <p class="precio_producto">$<?php echo $fila['precio']?></p>
+                                            <input type="hidden" name="hidden_id" value="<?php echo $fila['TProductos_id'] ?>">
+                                            <input type="hidden" name="hidden_Nombre" value="<?php echo $fila['nombre_Articulo']?>">
+                                            <input type="hidden" name="hidden_Precio" value="<?php echo $fila['precio']?>">
+                                            <input type="hidden" name="hidden_Granel" value="<?php echo $fila['granel']?>">
+                                            <input type="hidden" name="hidden_Stock" value="<?php echo $fila['stock']?>">
+                                        </div>
+                                        </button>
+                                    </form>
+                                </div> 
+                         <?php   } 
+                         } 
+                    ?>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////
+<div class="container">
+        
+        <div class="row">
+            <div class="col-xs-2">
+                <br/>
+                <label>Search Name</label>
+                <input class="typeahead form-control" type="text" placeholder="Search Name....">
+            </div>
+        </div>
+    </div>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+
+<script src="java.js"></script>
+
+///////////////////////////////////////////////////////////////////////////////////
