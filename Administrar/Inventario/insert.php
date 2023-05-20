@@ -139,17 +139,17 @@
                                 if($imagen_Size > 1000000){
 
                                     $contador = $contador + 1;
-                                    $tipoError2 = "El tama;o de la imagen es demasiado grande";
+                                    $tipoError2 = "El tamaño de la imagen es demasiado grande";
 
                                 }
 
-                                if($imagen_Tipo == "image/jpg" || $imagen_Tipo == "image/jpeg" || $imagen_Tipo == "image/png" || $imagen_Tipo == "image/webp" || $imagen_Tipo == "image/gif" ){
+                                if($imagen_Tipo == "image/jpg" || $imagen_Tipo == "image/jpeg" || $imagen_Tipo == "image/png" || $imagen_Tipo == "image/webp" ){
 
                                 }else{
 
                                     $contador=$contador + 1;
 
-                                    $tipoError3 = "Solo se pueden subir imagenes jpg, jpeg, png, gif y webp";   
+                                    $tipoError3 = "Solo se pueden subir imagenes jpg, jpeg, png, y webp";   
 
                                 }
 
@@ -188,7 +188,7 @@
                                 }else{
 
                                     //ruta carpeta destino
-                                    $carpeta_Destino = $_SERVER['DOCUMENT_ROOT'] . '/Ejercicios/Proyecto/Project final - v5/venta/nuevaVenta/img/prod/';
+                                    $carpeta_Destino = '../../venta/nuevaVenta/img/prod/';
 
                                     //movemos la imagen del directorio temporal al directorio escogido
 

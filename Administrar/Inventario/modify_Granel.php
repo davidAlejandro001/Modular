@@ -132,6 +132,7 @@
                                 $codigo=$prod['codigo_Barras'];
                                 $compra=$prod['precio_Compra'];
                                 $minimo=$prod['stock_minimo'];
+                                $Imagen=$prod['Imagen'];
                             }
 
                             $sql2="SELECT * FROM tgranel INNER JOIN t_tipogranel WHERE tgranel.T_TipoGranel_id = t_tipogranel.T_TipoGranel_id AND  tgranel.TProductos_id = ?";
@@ -153,6 +154,21 @@
                         }else{
                             //guardando los datos del formulario
                             $Id=$_POST["id"];
+
+                            include("conexion.php");
+
+                            $sql="SELECT * FROM tproductos WHERE TProductos_id = ?";
+
+                            $resultado = array($Id);
+                            $stmt = $base->prepare($sql);
+                            $stmt->execute($resultado);
+
+                            if($prod=$stmt->fetch(PDO::FETCH_ASSOC)){  
+                                $Imagen=$prod['Imagen']; 
+                            }
+                            
+                            /////////////////////////////////////////////////////////////////////////////
+
                             $proveedor = $_POST["prov"];
                             $categoria = $_POST["categ"];
                             $nombre = $_POST["nombre"];
@@ -166,6 +182,39 @@
 
                             $tipoError1 = "";
                             $tipoError2 = "";
+                            $tipoError3 = "";
+
+                            if($_FILES['imagen']['name'] != ""){
+
+                                //si es diferente de nulo: comprobamos tamanio, eliminamos la otra del servidor
+
+                                $imagen_Nombre = $_FILES['imagen']['name'];
+                                $imagen_Tipo = $_FILES['imagen']['type'];
+                                $imagen_Size = $_FILES['imagen']['size'];
+
+                                $old_Image = $_POST['old_Image'];
+
+                                if($imagen_Size > 1000000){
+
+                                    $contador = $contador + 1;
+                                    $tipoError2 = "El tamaño de la imagen es demasiado grande";
+
+                                }
+
+                                if($imagen_Tipo == "image/jpg" || $imagen_Tipo == "image/jpeg" || $imagen_Tipo == "image/png" || $imagen_Tipo == "image/webp" ){
+
+                                }else{
+
+                                    $contador=$contador + 1;
+
+                                    $tipoError3 = "Solo se pueden subir imagenes jpg, jpeg, png, y webp";   
+
+                                }
+
+                            }else{
+
+                                $imagen_Nombre = $_POST["old_Image"];
+                            }
 
                             if (empty($Id) || empty($proveedor) || empty($categoria) || empty($nombre) || empty($nuevoCosto) || empty($precio_Compra) || empty($cod) || empty($min) || empty($granel)) {
 
@@ -190,7 +239,7 @@
                                     Swal.fire({
                                     icon: 'error',
                                     title: 'Corregir los siguientes errores: ',
-                                    html: '<?php echo "<div>$tipoError1<br></div>" ?>',
+                                    html: '<?php echo "<div>$tipoError1<br>$tipoError2<br>$tipoError3<br></div>" ?>',
                                     })
 
                                 </script>
@@ -205,7 +254,7 @@
 
     <h2>Modificar</h2>
 
-    <form name="form1" method="post" action="<?php echo $_SERVER['PHP_SELF'];  ?>">
+    <form name="form1" method="post" action="<?php echo $_SERVER['PHP_SELF'];  ?>" enctype="multipart/form-data">
         <div class="mb-3">
             <input type="hidden" class="form-control" name="id" id="id" value="<?php
             
@@ -389,6 +438,12 @@
 
         <!-- -----------------------------------------------------------------------------------------------------------------  -->
         
+        <div class="my-3">
+            <label for="imagen">Subir Nueva Imagen</label>
+            <input type="file" class="form-control" name="imagen" id="imagen">
+            <input type="hidden" name="old_Image" value="<?php echo $Imagen; ?>">
+        </div>
+
         <button type="submit" class="btn btn-primary" name="bot_actualizar" id="bot_actualizar">Aceptar</button>
         </form>
     </div>
@@ -403,21 +458,47 @@
 
                             }else{
 
-                                
-                                $sql="UPDATE tproductos SET TCategoria_id=:cat, TProveedor_id=:prv, nombre_Articulo=:nom, precio=:cost, codigo_Barras=:codigo, precio_Compra=:compra WHERE TProductos_id=:miId";
-                                $resultado=$base->prepare($sql);
+                                if($_FILES['imagen']['name'] == ""){
 
-                                $resultado->execute(array(":miId"=>$Id, ":cat"=>$categoria, ":prv"=>$proveedor, ":nom"=>$nombre, ":cost"=>$nuevoCosto, ":codigo"=>$cod, ":compra"=>$precio_Compra));
-                        
-                                $sql3="UPDATE tinventario SET stock_minimo=:min WHERE TProductos_id=:prodId";
-                                $resultado3=$base->prepare($sql3);
-                                $resultado3->execute(array(":prodId"=>$Id, ":min"=>$min));
+                                    $sql="UPDATE tproductos SET TCategoria_id=:cat, TProveedor_id=:prv, nombre_Articulo=:nom, precio=:cost, codigo_Barras=:codigo, precio_Compra=:compra, Imagen=:img WHERE TProductos_id=:miId";
+                                    $resultado=$base->prepare($sql);
 
-                                $sql5="UPDATE tgranel SET T_TipoGranel_id=:gran WHERE TProductos_id=:prodId";
-                                $resultado5=$base->prepare($sql5);
-                                $resultado5->execute(array(":prodId"=>$Id, ":gran"=>$granel));
-                                
-                                echo "<p class='fw-semibold font-monospace'>Registro actualizado con exito</p>";
+                                    $resultado->execute(array(":miId"=>$Id, ":cat"=>$categoria, ":prv"=>$proveedor, ":nom"=>$nombre, ":cost"=>$nuevoCosto, ":codigo"=>$cod, ":compra"=>$precio_Compra, ":img"=>$imagen_Nombre));
+                            
+                                    $sql3="UPDATE tinventario SET stock_minimo=:min WHERE TProductos_id=:prodId";
+                                    $resultado3=$base->prepare($sql3);
+                                    $resultado3->execute(array(":prodId"=>$Id, ":min"=>$min));
+
+                                    $sql5="UPDATE tgranel SET T_TipoGranel_id=:gran WHERE TProductos_id=:prodId";
+                                    $resultado5=$base->prepare($sql5);
+                                    $resultado5->execute(array(":prodId"=>$Id, ":gran"=>$granel));
+                                    
+                                    echo "<p class='fw-semibold font-monospace'>Registro actualizado con exito</p>";
+
+                                }else{
+
+                                    //eliminando imagen anterior del servidor
+                                    $carpeta_Destino = '../../venta/nuevaVenta/img/prod/';
+                                    unlink($carpeta_Destino.$old_Image);
+                                    //agregando imagen al servidor
+                                    move_uploaded_file($_FILES['imagen']['tmp_name'], $carpeta_Destino.$imagen_Nombre);
+
+                                    $sql="UPDATE tproductos SET TCategoria_id=:cat, TProveedor_id=:prv, nombre_Articulo=:nom, precio=:cost, codigo_Barras=:codigo, precio_Compra=:compra, Imagen=:img WHERE TProductos_id=:miId";
+                                    $resultado=$base->prepare($sql);
+
+                                    $resultado->execute(array(":miId"=>$Id, ":cat"=>$categoria, ":prv"=>$proveedor, ":nom"=>$nombre, ":cost"=>$nuevoCosto, ":codigo"=>$cod, ":compra"=>$precio_Compra, ":img"=>$imagen_Nombre));
+                            
+                                    $sql3="UPDATE tinventario SET stock_minimo=:min WHERE TProductos_id=:prodId";
+                                    $resultado3=$base->prepare($sql3);
+                                    $resultado3->execute(array(":prodId"=>$Id, ":min"=>$min));
+
+                                    $sql5="UPDATE tgranel SET T_TipoGranel_id=:gran WHERE TProductos_id=:prodId";
+                                    $resultado5=$base->prepare($sql5);
+                                    $resultado5->execute(array(":prodId"=>$Id, ":gran"=>$granel));
+                                    
+                                    echo "<p class='fw-semibold font-monospace'>Registro actualizado con exito</p>";
+
+                                }
 
                             }
 

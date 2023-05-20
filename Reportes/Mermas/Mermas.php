@@ -240,7 +240,7 @@
                     <!-- Inicio de la tabla -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Reportes de Productos dados de Baja</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Reportes de Mermas</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -271,7 +271,7 @@
                                                     <tr>
                                                         <th>Producto</th>
                                                         <th>Cantidad</th>
-                                                        <th>Descripcion</th>
+                                                        <th>Descripción</th>
                                                         <th>Fecha</th>
                                                     </tr>
                                                 </thead>
@@ -286,7 +286,7 @@
                                                 <td><?php echo $dataRow['nombre_Articulo'] ?></td>
                                                 <td><?php echo $dataRow['cantidad']; ?></td>
                                                 <td><?php echo $dataRow['descripcion'] ?></td>
-                                                <td><?php echo $dataRow['fecha']; ?></td>
+                                                <td><?php echo date('d-m-Y', strtotime($dataRow['fecha'])) ?></td>
                                             </tr>
 
                                         <?php

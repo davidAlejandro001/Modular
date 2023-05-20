@@ -282,7 +282,7 @@
                                                 <tr>
                                                     <th>No. Venta</th>
                                                     <th>Fecha</th>
-                                                    <th>Empleado</th>
+                                                    <th>Venta Realizada</th>
                                                     <th>Productos</th>
                                                     <th>Total</th>
                                                 </tr>
@@ -292,21 +292,11 @@
 
                                         while($dataRow=$stmt->fetch(PDO::FETCH_ASSOC)){
 
-                                            /*$empleado_id=$dataRow['TEmpleado_id'];
-                                            
-                                            $resultado2=$base->query("SELECT * FROM t_empleado WHERE TEmpleado_id=$empleado_id")->fetchAll(PDO::FETCH_OBJ);
-
-                                            foreach($resultado2 as $registro){
-                                                $nombre = $registro->nombre;
-                                                $ape = $registro->apellidos;
-                                            }*/
-                                            
-
-                                            ?>
+                                           ?>
                                             
                                             <tr class=''>
                                                 <td><?php echo $dataRow['TVenta_id'] ?></td>
-                                                <td><?php echo $dataRow['fecha']; ?></td>
+                                                <td><?php echo date('d-m-Y', strtotime($dataRow['fecha'])) ?></td>
                                                 <td><?php echo $dataRow['nombre'] . " " . $dataRow['apellidos'] ?></td>
                                                 <td><?php echo $dataRow['productos_Venta'] ?></td>
                                                 <td><?php echo $dataRow['total']; ?></td>

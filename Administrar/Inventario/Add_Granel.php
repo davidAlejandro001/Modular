@@ -13,13 +13,20 @@
 
     <!-- Custom styles for this template
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="../../css/sb-admin-2.css" rel="stylesheet">-->
+    <link href="../../css/sb-admin-2.css" rel="stylesheet">--> 
     <link href="../../css/sb-inventario.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body id="page-top">
 
     <?php 
+
+      session_start();
+    //Control de los usuarios
+    if (!isset($_SESSION["usuario"])) {
+       header("location:../../index.php");
+  }
     ?> 
 
     <!-- Menu (azul) -->
@@ -28,23 +35,27 @@
         <!-- Parte inicial -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <!-- Icono -->
+            <!-- Icono - Tipo Usuario -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                 <div class="sidebar-brand-icon">
                     <i class="fas fa-store"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3"><?php ?></div>
+                <div class="sidebar-brand-text mx-3"><?php echo $_SESSION["perfil"] ?></div>
             </a>
+
+            <!-- Barra divisoria -->
+            <hr class="sidebar-divider my-0">
 
             <!-- Barra divisoria -->
             <hr class="sidebar-divider">
 
+            <!-- volver a admin prov -->
             <div class="sidebar-heading">
-                Venta
+                Control del Inventario
             </div>
 
             <li class="nav-item">
-                <a  class="nav-link collapsed" href="venta1.php"
+                <a  class="nav-link collapsed" href="inventario.php"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fa fa-reply"></i>
                     <span>Volver</span>
@@ -61,96 +72,92 @@
         </ul>
         <!-- Fin Menu -->
 <!-- // ---------------------------------------------------------------------------------------------------------------------------- -->
-        <!-- Content Wrapper -->
+        <!-- Nombre Usuario e imagen -->
         <div id="content-wrapper" class="d-flex flex-column">
 
-            <!-- Main Content -->
             <div id="content">
 
-                <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    
-                    <!-- Topbar Navbar -->
+
                     <ul class="navbar-nav ml-auto">
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
-                        <!-- Nombre Usuario -->
+                        <!-- Nombre del Usuario -->
                         
                         <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php  //echo $_SESSION["usuario"]?></span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php  echo $_SESSION["usuario"]?></span>
                                     <img class="img-profile rounded-circle"
                                         src="../../img/admin.webp">
                                 </a>
                         </li>
+                        
                     </ul>
 
                 </nav>
-                <!-- Fin esta Parte -->
+                <!-- fin esta parte -->
 
                 <div class="container-fluid">
 
-                <?php 
+                    <?php 
 
-                    $numVenta = $_POST["numVenta"];
-                    $total=$_POST["total"];
-                    $empleado = $_POST["numEmpleado"];
-                    $fecha=$_POST["fecha"];
-                    $cambio=$_POST["cambio"];
-
-                    if (empty($cambio) || $cambio=="NaN") {
-
-                        ?>
-                            <script>
-
-                                Swal.fire({
-                                icon: 'error',
-                                title: 'No puedes dejar espacios en blanco ',
-                                text: "<?php echo "vuelve a intentarlo" ?>"
-                                })
-
-                            </script>
-
-                        <img src="css/error.jpg" class="img-fluid" alt="No puedes dejar espacios en blanco">
-                        <?php
-
-                    }else{
-
-                    
-                        
                         include("conexion.php");
-                    
-                        //generando la venta
-                        $sql="INSERT INTO tventa( TVenta_id, TEmpleado_id, total, fecha) VALUES (:id,:emp,:total, :fecha)";
-                        $resultado=$base->prepare($sql);
 
-                        $resultado->execute(array(":id"=>$numVenta,":emp"=>$empleado, ":total"=>$total, ":fecha"=>$fecha));
+                        //si no has pulsado boton actualizar
+                        if (!isset($_POST["bot_actualizar"])) {
+                            # code...
 
-                        $sql2 = "UPDATE tlista_venta SET TVenta_id=:num WHERE TVenta_id=0";
-                        $resultado2=$base->prepare($sql2);
-                                
-                        $resultado2->execute(array(":num"=>$numVenta));
+                            $Id=$_GET["Id"];
+                            $Stock=$_GET["cant"];
 
-                        //echo "venta realizada con exito";
-                        header("Location:venta1.php");
+                            include_once("form_Granel.php");
 
-                    
+                        }else{
+                            //guardando los datos del formulario
+                            $Id=$_POST["id"];
+                            $stocks=$_POST["stock"];
+                            $cantidad=$_POST["cantidad"];
 
-                    }
-                    
-                    
-                ?>
+                            if($cantidad != null){
+
+                                $stocks = $stocks + $cantidad;
+
+                                $sql="UPDATE tinventario SET stock=:stk WHERE TProductos_id=:miId";
+                                $resultado=$base->prepare($sql);
+
+                                $resultado->execute(array(":miId"=>$Id, ":stk"=>$stocks));
+                            
+                                echo "<p class='fw-semibold font-monospace'>Registro actualizado con exito</p>";
+
+                            }else{
+
+                                ?>
+                                <script>
+
+                                        Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error: ',
+                                        html: 'No dejar espacios en blanco',
+                                        })
+
+                                </script>
+                                <?php
+
+                                include_once("form_Granel.php");
+
+                            }
+                            
+                        }
+                        
+                        ?>
 
                 </div>
 
-                
-
             </div>
-            <!-- Fin tabla -->
 
-            <!-- Pie de pagina -->
+            <!-- Pie de Pagina -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
@@ -158,13 +165,13 @@
                     </div>
                 </div>
             </footer>
-            <!-- Fin pie pag -->
+            <!-- Fin pie de pagina -->
 
         </div>
 
     </div>
 
-    <!-- Button-->
+    <!-- Boton para volver a esta parte -->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>

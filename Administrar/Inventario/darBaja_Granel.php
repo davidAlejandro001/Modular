@@ -10,15 +10,13 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-    <!-- Libreria necesaria para el boton de elimminar, tiene que estar al inicio, no al final -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
     <!-- Custom styles for this template
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="../../css/sb-admin-2.css" rel="stylesheet"> --> 
+    <link href="../../css/sb-admin-2.css" rel="stylesheet">--> 
     <link href="../../css/sb-inventario.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body id="page-top">
 
@@ -105,64 +103,81 @@
 
                     <?php 
 
-                    $Id=$_POST["Id"];
+                        include("conexion.php");
 
-                    include("conexion.php");
+                        //si no has pulsado boton actualizar
+                        if (!isset($_POST["bot_actualizar"])) {
+                            # code...
 
-                            $sql="SELECT * FROM tproductos WHERE TProductos_id = ?";
+                            $Id=$_GET["Id"];
+                            $Stock=$_GET["cant"];
 
-                            $resultado = array($Id);
-                            $stmt = $base->prepare($sql);
-                            $stmt->execute($resultado);
+                            include_once("formBaja_Granel.php");
+ 
+                        }else{
+                            //guardando los datos del formulario
+                            $Id=$_POST["id"];
+                            $cantidad=$_POST["cantidad"];
+                            $Stock = $_POST["stock"];
+                            $descripcion = $_POST["des"];
+                            $contador=0;
 
-                            if($prod=$stmt->fetch(PDO::FETCH_ASSOC)){
+                            $tipoError1="";
+                            $tipoError2="";
+                            $tipoError3="";
 
-                                $ruta= $prod['Imagen'];
+                            if(empty($Id) || empty($cantidad) || empty($Stock) || empty($descripcion)){
 
-                            }
-                    
-                    /*$conexion=mysqli_connect("localhost","root","Thewalkingdead_01","sistematiendasjii");
-                            
-                    $consulta2="SELECT COUNT(TProductos_id) FROM tventa WHERE TProductos_id=$Id";
-
-                    $Resultados2=mysqli_query($conexion,$consulta2);
-
-                    $row = mysqli_fetch_array($Resultados2);
-
-                    $total = $row[0];*/
-                    
-                    ?>
-
-                    <?php 
-
-                        try {
-
-                            if(isset($_POST['deleteData'])){
-
-                               // if($total==0){
-
-                                    include("conexion.php");
-
-                                    $base->query("DELETE FROM tinventario WHERE TProductos_id='$Id'");
-                                    $base->query("DELETE FROM tproductos WHERE TProductos_id='$Id'");
-
-                                    $carpeta_Destino = '../../venta/nuevaVenta/img/prod/';
-                                    unlink($carpeta_Destino.$ruta);
-
-                                    echo "<p class='fw-semibold font-monospace'>Producto eliminado correctamente</p>";
-
-                               // }else{
-
-                                 //   echo "No se puede eliminar porque el id, esta siendo referenciado en otra tabla";
-
-                                //}
-
+                                $tipoError1="No puedes dejar espacios en blanco.";
+                                $contador = $contador + 1;
                             }
 
-                        } catch (Exception $th) {
-                            
-                            echo "No se puede eliminar porque el id, esta siendo referenciado en otra tabla";
+                            if (preg_match("/^[[a-zA-Z áéíóúÁÉÍÓÚñÑ]{7,100}$/i", trim($descripcion)) !== 1) {
+                                $contador = $contador + 1;
+                                $tipoError2 =  'solo letras. '; 
+                            }
 
+                            if($cantidad > $Stock){
+                                $contador = $contador + 1;
+                                $tipoError3 = "No hay suficientes articulos en el inventario";
+                            }
+
+                            if($contador > 0){
+                                ?>
+                                <script>
+
+                                        Swal.fire({
+                                        icon: 'error',
+                                        title: 'Corregir los siguientes errores: ',
+                                        html: '<?php echo "<div>$tipoError1<br>$tipoError2<br>$tipoError3</div>" ?>',
+                                        })
+
+                                </script>
+                                <?php
+
+                                include("formBaja_Granel.php");
+
+                            }else{
+
+                                $stocks = $Stock - $cantidad;
+
+                                date_default_timezone_set('America/Mexico_City');
+                                $fechaGuardar = date('Y-m-d');
+
+                                $sql="UPDATE tinventario SET stock=:stk WHERE TProductos_id=:miId";
+                                $resultado=$base->prepare($sql);
+
+                                $resultado->execute(array(":miId"=>$Id, ":stk"=>$stocks));
+
+                                $sql2="INSERT INTO t_merma(TProductos_id, cantidad, descripcion, fecha) VALUES (:miId, :cant, :descripcion, :fecha)";
+                                $resultado2=$base->prepare($sql2);
+
+                                $resultado2->execute(array(":miId"=>$Id, ":cant"=>$cantidad, ":descripcion"=>$descripcion, ":fecha"=>$fechaGuardar));
+                                        
+                                echo "<p class='fw-semibold font-monospace'>Registro actualizado con exito</p>";
+                                
+                            }
+                            
                         }
                         
                         ?>

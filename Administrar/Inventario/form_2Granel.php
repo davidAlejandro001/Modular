@@ -29,7 +29,7 @@
 
     <h2>Modificar</h2>
 
-    <form name="form1" method="post" action="<?php echo $_SERVER['PHP_SELF'];  ?>">
+    <form name="form1" method="post" action="<?php echo $_SERVER['PHP_SELF'];  ?>" enctype="multipart/form-data">
         <div class="mb-3">
             <input type="hidden" class="form-control" name="id" id="id" value="<?php echo $Id?>">
 
@@ -145,6 +145,12 @@
                                         endforeach;
                                 ?>
             </select>
+        </div>
+
+        <div class="my-3">
+            <label for="imagen">Subir Nueva Imagen</label>
+            <input type="file" class="form-control" name="imagen" id="imagen">
+            <input type="hidden" name="old_Image" value="<?php echo $Imagen; ?>">
         </div>
 
         <!-- -----------------------------------------------------------------------------------------------------------------  -->

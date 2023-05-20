@@ -284,7 +284,7 @@
                                         <tr class=''>
                                             <td><?php echo $dataRow['Importe'] ?></td>
                                             <td><?php echo $dataRow['Descripcion']; ?></td>
-                                            <td><?php echo $dataRow['fecha']; ?></td>
+                                            <td><?php echo date('d-m-Y', strtotime($dataRow['fecha'])) ?></td>
                                         </tr>
 
                                     <?php

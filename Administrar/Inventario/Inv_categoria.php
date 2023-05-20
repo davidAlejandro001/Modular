@@ -393,10 +393,10 @@
                                                 <td><?php echo $InventarioTotal . "(" . $Tipo_Granel . ")"; ?></td>
                                                 <td><?php echo $Minimo . "(" . $Tipo_Granel . ")"; ?></td>
                                                 <td>
-                                                <a class="btn btn-primary" role="button" href="Add.php?Id=<?php echo $productos['TProductos_id']?> & 
+                                                <a class="btn btn-primary" role="button" href="Add_Granel.php?Id=<?php echo $productos['TProductos_id']?> & 
                                                             cant=<?php echo $InventarioTotal?>">
                                                             <?php echo "(+)" ?> Stock</a>
-                                                <a class="btn btn-danger" role="button" href="darBaja.php?Id=<?php echo $productos['TProductos_id']?> & 
+                                                <a class="btn btn-danger" role="button" href="darBaja_Granel.php?Id=<?php echo $productos['TProductos_id']?> & 
                                                                         cant=<?php echo $InventarioTotal?>">
                                                                         Dar Baja</a>
                                                 <a href="modify_Granel.php?Id=<?php echo $productos['TProductos_id']?> & 
