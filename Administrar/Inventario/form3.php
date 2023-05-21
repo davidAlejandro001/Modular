@@ -76,8 +76,8 @@
                                     ?>
             </select>
         </div>
-
-        <div class="my-3">
+        <div class="form-row"> 
+        <div class="form-group col-md-4">
             <label for="">Stock Inicial</label>
             <input type="number" step="0.01" min="0" class="form-control" name="stock" id="stock" placeholder="Ingresa la cantidad total"
 
@@ -94,7 +94,7 @@
             >
         </div>
 
-        <div class="my-3">
+        <div class="form-group col-md-4">
             <label for="">stock minimo</label>
             <input type="number" step="0.01" min="0" class="form-control" name="min" id="min" placeholder="Ingresa la cantidad total"
             
@@ -111,6 +111,14 @@
             >
         </div>
 
+        <div class="form-group col-md-4">
+            <label for="">Ganancia %</label>
+            <input type="number" min="0" max="100" value="30" class="form-control" name="ganancia" id="ganancia" placeholder="Ingresa la cantidad total"
+            
+            >
+        </div>      
+
+        </div>
         <div class="my-3">
             <label for="">Precio de Compra</label>
             <input type="number" step="0.01" min="0" class="form-control" name="compra" id="compra" placeholder="Ingresa el precio del articulo x unidad"
@@ -219,6 +227,19 @@
 </div>
 </div>
 </div>
+
+<script>
+    //para cuando se genera la venta, se muestre el cambio
+let precio1 = document.getElementById("ganancia")
+let precio2 = document.getElementById("compra")
+let precio3 = document.getElementById("precio")
+
+precio2.addEventListener("change", () => {
+    precio3.value = (parseFloat(precio2.value) * (parseFloat(precio1.value)/100)) + parseFloat(precio2.value)
+
+})
+</script>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
         <script src="granel.js"></script>
 </body>

@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template -->
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="css/sb-admin-2.css" rel="stylesheet">
 </head>
 <body> 
@@ -76,7 +76,25 @@
 
 
             }else{
-                include("Recursos/error.php");
+
+                //aqui agregar el sweet alert
+                include("index.php");
+                ?>
+                                    
+                <script>
+
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'Error ',
+                    html: '<?php echo "El usuario o la contraseña son incorrectos, intentalo de nuevo" ?>',
+                
+                })
+
+                </script>
+
+                <?php
+                
+                //include("Recursos/error.php");
             }
 
             $resultado->closeCursor();

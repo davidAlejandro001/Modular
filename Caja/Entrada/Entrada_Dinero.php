@@ -115,7 +115,7 @@ Function Caja_Id_valor (&$valorId){
                     <input type="hidden" name="user" value=<?php echo $_SESSION["usuario"] ?>>
                     <input type="hidden" name="password" value=<?php echo $_SESSION["contra"] ?>>
                     
-                    <button type="submit" class="button" name="enviar">Menu Principal</button>
+                    <button type="submit" class="button" name="enviar">Menu</button>
                     
                 </form>
             </li>

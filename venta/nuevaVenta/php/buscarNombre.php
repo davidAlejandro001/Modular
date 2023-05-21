@@ -87,7 +87,6 @@ if(isset($_POST["buscar_Nombre"]) and $_POST["nombre_Prod"] != null){
                                                 <input type="hidden" name="hidden_Precio" value="<?php echo $fila['precio']?>">
                                                 <input type="hidden" name="hidden_Granel" value="<?php echo $fila['granel']?>">
                                                 <input type="hidden" name="hidden_Stock" value="<?php echo $fila['stock']?>">
-                                                <input type="hidden" name="hidden_Stock" value="<?php echo $fila['T_TipoGranel_id']?>">
                                                 <input type="hidden" name="hidden_Codigo" value="<?php echo $fila['codigo_Barras'] ?>">
                                             </div>
                                             </button>
@@ -309,7 +308,6 @@ if(isset($_POST["buscar_Nombre"]) and $_POST["nombre_Prod"] != null){
                                              <input type="hidden" name="hidden_Precio" value="<?php echo $fila['precio']?>">
                                              <input type="hidden" name="hidden_Granel" value="<?php echo $fila['granel']?>">
                                              <input type="hidden" name="hidden_Stock" value="<?php echo $fila['stock']?>">
-                                             <input type="hidden" name="hidden_Stock" value="<?php echo $fila['T_TipoGranel_id']?>">
                                              <input type="hidden" name="hidden_Codigo" value="<?php echo $fila['codigo_Barras'] ?>">
                                          </div>
                                          </button>

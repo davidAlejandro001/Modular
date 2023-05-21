@@ -183,6 +183,8 @@
                             $tipoError1 = "";
                             $tipoError2 = "";
                             $tipoError3 = "";
+                            $tipoError4 = "";
+                            $carpeta_Destino = '../../venta/nuevaVenta/img/prod/';
 
                             if($_FILES['imagen']['name'] != ""){
 
@@ -202,6 +204,11 @@
                                 }
 
                                 if($imagen_Tipo == "image/jpg" || $imagen_Tipo == "image/jpeg" || $imagen_Tipo == "image/png" || $imagen_Tipo == "image/webp" ){
+
+                                    if(file_exists($carpeta_Destino.$imagen_Nombre)){
+                                        $contador = $contador + 1;
+                                        $tipoError4 = "Ya existe un archivo con el mismo nombre. ";
+                                    }
 
                                 }else{
 
@@ -478,7 +485,6 @@
                                 }else{
 
                                     //eliminando imagen anterior del servidor
-                                    $carpeta_Destino = '../../venta/nuevaVenta/img/prod/';
                                     unlink($carpeta_Destino.$old_Image);
                                     //agregando imagen al servidor
                                     move_uploaded_file($_FILES['imagen']['tmp_name'], $carpeta_Destino.$imagen_Nombre);

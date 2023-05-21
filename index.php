@@ -69,11 +69,11 @@
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Ingresa tu Usuario" name="user">
+                                                placeholder="Ingresa tu Usuario" name="user" value="<?php if(isset($usuario)) echo $usuario ?>">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password" name="password">
+                                                id="exampleInputPassword" placeholder="Password" name="password" value="<?php if(isset($password)) echo $password ?>">
                                         </div>
                                         
                                         <button type="submit" class="btn btn-primary btn-lg" name="enviar">Enviar</button>

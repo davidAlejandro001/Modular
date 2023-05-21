@@ -120,6 +120,7 @@
                                 $tipoError1 = "";
                                 $tipoError2 = "";
                                 $tipoError3 = "";
+                                $tipoError4 = "";
 
                                 $nombre = $_POST["nombre"];
                                 $stock = $_POST["stock"];
@@ -136,24 +137,36 @@
                                 $imagen_Tipo = $_FILES['imagen']['type'];
                                 $imagen_Size = $_FILES['imagen']['size'];
 
-                                if($imagen_Size > 1000000){
+                                //ruta carpeta destino
+                                $carpeta_Destino = '../../venta/nuevaVenta/img/prod/';
 
-                                    $contador = $contador + 1;
-                                    $tipoError2 = "El tamaño de la imagen es demasiado grande";
+                                if($_FILES['imagen']['name'] != ""){
+
+                                    if($imagen_Size > 1000000){
+
+                                        $contador = $contador + 1;
+                                        $tipoError2 = "El tamaño de la imagen es demasiado grande";
+    
+                                    }
+    
+                                    if($imagen_Tipo == "image/jpg" || $imagen_Tipo == "image/jpeg" || $imagen_Tipo == "image/png" || $imagen_Tipo == "image/webp" ){
+    
+                                        if(file_exists($carpeta_Destino.$imagen_Nombre)){
+                                            $contador = $contador + 1;
+                                            $tipoError4 = "Ya existe un archivo con el mismo nombre. ";
+                                        }
+    
+                                    }else{
+    
+                                        $contador=$contador + 1;
+    
+                                        $tipoError3 = "Solo se pueden subir imagenes jpg, jpeg, png, y webp";   
+    
+                                    }
 
                                 }
 
-                                if($imagen_Tipo == "image/jpg" || $imagen_Tipo == "image/jpeg" || $imagen_Tipo == "image/png" || $imagen_Tipo == "image/webp" ){
-
-                                }else{
-
-                                    $contador=$contador + 1;
-
-                                    $tipoError3 = "Solo se pueden subir imagenes jpg, jpeg, png, y webp";   
-
-                                }
-
-                                if ($nombre == null || $stock == null || $precio == null || $categoria == null || $proveedor == null || $compra == null || $codigoBarras == null || $minimo == null || $granel == null ) {
+                                if ($nombre == null || $stock == null || $precio == null || $categoria == null || $proveedor == null || $compra == null || $codigoBarras == null || $minimo == null || $granel == null || $_FILES['imagen']['name'] == null) {
 
                                     $contador = $contador + 1;
 
@@ -176,7 +189,7 @@
                                         Swal.fire({
                                         icon: 'error',
                                         title: 'Corregir los siguientes errores: ',
-                                        html: '<?php echo "<div>$tipoError1<br>$tipoError2<br>$tipoError3</div>" ?>',
+                                        html: '<?php echo "<div>$tipoError1<br>$tipoError2<br>$tipoError3<br>$tipoError4</div>" ?>',
                                         })
 
                                     </script>
@@ -187,11 +200,8 @@
 
                                 }else{
 
-                                    //ruta carpeta destino
-                                    $carpeta_Destino = '../../venta/nuevaVenta/img/prod/';
-
                                     //movemos la imagen del directorio temporal al directorio escogido
-
+                                    
                                     move_uploaded_file($_FILES['imagen']['tmp_name'], $carpeta_Destino.$imagen_Nombre);
 
                                     if($granel != "No"){
@@ -230,7 +240,7 @@
                                         echo "<p class='fw-semibold font-monospace'>Nuevos Registros Agregados Correctamente</p>";
 
                                     }
-
+                                    
                                 }
 
                             } catch (Exception $th) {

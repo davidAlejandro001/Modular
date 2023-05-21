@@ -586,17 +586,7 @@ include("conexion.php");
     </div>
 </div>
         <div class="Productos">
-            <div class="Categorias">
-                <div class="CardCategoria">
-                    <h1>Panaderia</h1>
-                </div>
-                <div class="CardCategoria">
-                    
-                </div>
-                <div class="CardCategoria">
-                    
-                </div>
-            </div>
+            
 
             <?php 
             
@@ -622,7 +612,7 @@ include("conexion.php");
                         FROM tproductos inner join tinventario, tgranel where tproductos.TProductos_id = tinventario.TProductos_id and tproductos.TProductos_id = tgranel.TProductos_id AND granel = 'Si' ORDER BY nombre_Articulo ASC;");
                         
                         */
-
+ 
                         require("php/conexion.php");
                         $consulta = mysqli_query($conexion, "SELECT tproductos.TProductos_id, nombre_Articulo, precio, granel, codigo_Barras, Imagen, tinventario.stock, tgranel.T_TipoGranel_id, t_tipogranel.descripcion
                         FROM tproductos inner join tinventario, tgranel, t_tipogranel
@@ -643,7 +633,6 @@ include("conexion.php");
                                             <input type="hidden" name="hidden_Precio" value="<?php echo $fila['precio']?>">
                                             <input type="hidden" name="hidden_Granel" value="<?php echo $fila['granel']?>">
                                             <input type="hidden" name="hidden_Stock" value="<?php echo $fila['stock']?>">
-                                            <input type="hidden" name="hidden_Stock" value="<?php echo $fila['T_TipoGranel_id']?>">
                                             <input type="hidden" name="hidden_Codigo" value="<?php echo $fila['codigo_Barras'] ?>">
                                         </div>
                                         </button>

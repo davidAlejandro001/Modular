@@ -88,7 +88,7 @@
                     <input type="hidden" name="user" value=<?php echo $_SESSION["usuario"] ?>>
                     <input type="hidden" name="password" value=<?php echo $_SESSION["contra"] ?>>
                     
-                    <button type="submit" class="button" name="enviar">Menu Principal</button>
+                    <button type="submit" class="button" name="enviar">Menu</button>
                     
                 </form>
             </li>
@@ -225,6 +225,10 @@
                 <!-- Fin de esta parte -->
 
                 <div class="container-fluid">
+
+                <div style="text-align: right;">
+                <a href="insert.php" role="button" class="btn btn-success">Hacer Corte</a>
+                </div>
                     
                     <hr>
                     <!-- Inicio de la tabla -->
@@ -235,7 +239,74 @@
                         <div class="card-body">
                             <div class="table-responsive">
 
+                            <div class="form-row"> 
+                            
+                                <div class="form-group col-md-6">
+                                <i class="fas fa-money-bill-wave"><FONT SIZE=6>Ventas Totales</font></i>
+                                    <br>
+                                    <br>
+                                    <FONT SIZE=6>$650.91</font>
+                                </div>
+                                <div class="form-group col-md-6">
+                                <i class="fa fa-area-chart"><FONT SIZE=6>$ Ganancia</font></i>
+                                    <br>
+                                    <br>
+                                    <FONT SIZE=6>$121.91</font>
+                                </div>
+
                             </div>
+
+                            <hr>
+                            <hr>
+                            <hr>
+
+                            <div class="form-row">
+
+                            
+
+                                <div class="col-md-6">
+                                    <h3>$Fondo en Caja</h2>
+                                </div>
+                                <div class="col-md-6">
+                                    <FONT SIZE=5>$1400</font>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h3>$Ventas</h2>
+                                </div>
+                                <div class="col-md-6">
+                                    <FONT SIZE=5>+$650.91</font>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h3>Entradas</h2>
+                                </div>
+                                <div class="col-md-6">
+                                    <FONT SIZE=5>+$200</font>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h3>Gastos</h2>
+                                </div>
+                                <div class="col-md-6">
+                                    <FONT SIZE=5>-400</font>
+                                </div>
+
+                                <hr class="sidebar-divider d-none d-md-block">
+                                <br>
+
+                                <div class="col-md-6">
+                                    <h3>Total</h2>
+                                </div>
+                                <div class="col-md-6">
+                                    <FONT SIZE=5>$1850.91</font>
+                                </div>
+                                
+                            </div>
+
+                            </div>
+
+
                         </div>
                     </div>
 

@@ -62,7 +62,7 @@
 
         <div class="mb-3">
             <label class="form-label">Agregar</label>
-            <input type="number" min="0" class="form-control"  name="cantidad" id="cantidad" 
+            <input type="number" min="1" class="form-control"  name="cantidad" id="cantidad" 
             
             <?php if(!isset($cantidad)) {?>
 

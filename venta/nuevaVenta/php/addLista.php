@@ -6,8 +6,8 @@
         $idProd = $_POST['hidden_id'];
         $nombre = $_POST["hidden_Nombre"];
         $precio = $_POST["hidden_Precio"];
-        $granel = $_POST["hidden_Granel"];
         $InventarioTotal = $_POST["hidden_Stock"];
+        $granel = $_POST["hidden_Granel"];
         $codigo = $_POST["hidden_Codigo"];
 
         include("conexion.php");

@@ -42,7 +42,7 @@
                 echo "0";
             }
             
-            ?>" max="<?php echo $Stock ?>" min="0">
+            ?>" max="<?php echo $Stock ?>" min="0.01">
         </div>
 
         <div class="mb-3">
